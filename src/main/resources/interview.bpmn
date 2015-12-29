@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
   <bpmn:collaboration id="interview">
     <bpmn:participant id="company" name="Company" processRef="Process_1" />
   </bpmn:collaboration>
@@ -53,7 +53,9 @@
         <bpmn:incoming>SequenceFlow_11blrf2</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="SequenceFlow_11blrf2" name="yes" sourceRef="ExclusiveGateway_0pycmet" targetRef="suitable1" />
-      <bpmn:sequenceFlow id="SequenceFlow_06xrupl" name="no" sourceRef="ExclusiveGateway_0pycmet" targetRef="ServiceTask_0w8kjfz" />
+      <bpmn:sequenceFlow id="SequenceFlow_06xrupl" name="no" sourceRef="ExclusiveGateway_0pycmet" targetRef="ServiceTask_0w8kjfz">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${true}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="SequenceFlow_13u59w5" sourceRef="ServiceTask_0w8kjfz" targetRef="EndEvent_1e10e7h" />
       <bpmn:sequenceFlow id="SequenceFlow_1uh4ibg" name="more info needed" sourceRef="ExclusiveGateway_0pycmet" targetRef="ServiceTask_016ipq0" />
       <bpmn:sequenceFlow id="SequenceFlow_0c2h64b" sourceRef="ServiceTask_016ipq0" targetRef="xor-join1" />
@@ -67,15 +69,15 @@
         <bpmn:incoming>SequenceFlow_1uqx74u</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_0wlv42f</bpmn:outgoing>
       </bpmn:userTask>
-      <bpmn:serviceTask id="ServiceTask_016ipq0" name="Request for More Info">
+      <bpmn:serviceTask id="ServiceTask_016ipq0" name="Request for More Info" camunda:expression="${true}">
         <bpmn:incoming>SequenceFlow_1uh4ibg</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_0c2h64b</bpmn:outgoing>
       </bpmn:serviceTask>
-      <bpmn:serviceTask id="ServiceTask_0w8kjfz" name="Send rejection notification">
+      <bpmn:serviceTask id="ServiceTask_0w8kjfz" name="Send rejection notification" camunda:expression="${true}">
         <bpmn:incoming>SequenceFlow_06xrupl</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_13u59w5</bpmn:outgoing>
       </bpmn:serviceTask>
-      <bpmn:serviceTask id="ServiceTask_18nrtos" name="Send rejection notification">
+      <bpmn:serviceTask id="ServiceTask_18nrtos" name="Send rejection notification" camunda:expression="${true}">
         <bpmn:incoming>SequenceFlow_03j9ox2</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_0cc5rwv</bpmn:outgoing>
       </bpmn:serviceTask>
@@ -140,8 +142,12 @@
       <bpmn:endEvent id="EndEvent_12ocd60">
         <bpmn:incoming>SequenceFlow_1fj0nmj</bpmn:incoming>
       </bpmn:endEvent>
-      <bpmn:sequenceFlow id="SequenceFlow_1fj0nmj" sourceRef="ExclusiveGateway_1dqv9h8" targetRef="EndEvent_12ocd60" />
-      <bpmn:sequenceFlow id="SequenceFlow_0qm85qo" sourceRef="ExclusiveGateway_1dqv9h8" targetRef="ExclusiveGateway_0ree4ir" />
+      <bpmn:sequenceFlow id="SequenceFlow_1fj0nmj" sourceRef="ExclusiveGateway_1dqv9h8" targetRef="EndEvent_12ocd60">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${true}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="SequenceFlow_0qm85qo" sourceRef="ExclusiveGateway_1dqv9h8" targetRef="ExclusiveGateway_0ree4ir">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${false}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
     </bpmn:subProcess>
     <bpmn:sequenceFlow id="SequenceFlow_0xy30m4" sourceRef="Task_0rblj7e" targetRef="SubProcess_1a16wzw" />
     <bpmn:subProcess id="SubProcess_1a16wzw" name="Setup Interview">
@@ -170,7 +176,7 @@
         <bpmn:incoming>SequenceFlow_1n4eqri</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="SequenceFlow_1n4eqri" sourceRef="ServiceTask_0u0dyud" targetRef="EndEvent_1k9f5e3" />
-      <bpmn:serviceTask id="ServiceTask_0u0dyud" name="Send  Appointment Information ">
+      <bpmn:serviceTask id="ServiceTask_0u0dyud" name="Send  Appointment Information " camunda:expression="${true}">
         <bpmn:incoming>SequenceFlow_13nbc51</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_1n4eqri</bpmn:outgoing>
       </bpmn:serviceTask>
@@ -208,11 +214,11 @@
         <bpmn:outgoing>SequenceFlow_0eehwnm</bpmn:outgoing>
         <bpmn:outgoing>SequenceFlow_1rador2</bpmn:outgoing>
       </bpmn:exclusiveGateway>
-      <bpmn:serviceTask id="ServiceTask_06hht12" name="Send Rejection Notification">
+      <bpmn:serviceTask id="ServiceTask_06hht12" name="Send Rejection Notification" camunda:expression="${true}">
         <bpmn:incoming>SequenceFlow_1rador2</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_0pcz0y3</bpmn:outgoing>
       </bpmn:serviceTask>
-      <bpmn:serviceTask id="send-approval" name="Send Approval Notification">
+      <bpmn:serviceTask id="send-approval" name="Send Approval Notification" camunda:expression="${true}">
         <bpmn:incoming>SequenceFlow_0eehwnm</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_0uh3qjx</bpmn:outgoing>
       </bpmn:serviceTask>
@@ -220,8 +226,12 @@
         <bpmn:incoming>SequenceFlow_0pcz0y3</bpmn:incoming>
         <bpmn:incoming>SequenceFlow_0uh3qjx</bpmn:incoming>
       </bpmn:endEvent>
-      <bpmn:sequenceFlow id="SequenceFlow_1rador2" sourceRef="xor-approved" targetRef="ServiceTask_06hht12" />
-      <bpmn:sequenceFlow id="SequenceFlow_0eehwnm" sourceRef="xor-approved" targetRef="send-approval" />
+      <bpmn:sequenceFlow id="SequenceFlow_1rador2" sourceRef="xor-approved" targetRef="ServiceTask_06hht12">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${true}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="SequenceFlow_0eehwnm" sourceRef="xor-approved" targetRef="send-approval">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${false}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="SequenceFlow_0pcz0y3" sourceRef="ServiceTask_06hht12" targetRef="EndEvent_0hyegf6" />
       <bpmn:sequenceFlow id="SequenceFlow_0uh3qjx" sourceRef="send-approval" targetRef="EndEvent_0hyegf6" />
       <bpmn:startEvent id="StartEvent_1xvfnzz" name="Start">
