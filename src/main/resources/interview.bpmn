@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
   <bpmn:collaboration id="interview">
-    <bpmn:participant id="company" name="Company" processRef="Process_1" />
+    <bpmn:participant id="company" name="Company" processRef="intervie" />
   </bpmn:collaboration>
-  <bpmn:process id="Process_1" isExecutable="false">
+  <bpmn:process id="intervie" isExecutable="true">
     <bpmn:laneSet>
       <bpmn:lane id="hr-recruiter" name="HR Recruiter">
         <bpmn:flowNodeRef>evaluate-appl</bpmn:flowNodeRef>
