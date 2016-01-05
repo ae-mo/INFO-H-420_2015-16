@@ -1,16 +1,47 @@
 package org.camunda.bpm.infoh420.interview;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Version;
+
 /**
  * Represents a university degree.
  * 
  */
-public class Degree {
+public class DegreeEntity {
+
+	@Version
+	protected long version;
 	
+	@Id
+	protected Long applicationId;
 	protected String school;
 	protected String title;
 	protected String status;
 	protected String field;
 	protected String countryRegion;
+	
+	
+	
+	public DegreeEntity(Long applicationId) {
+		super();
+		this.applicationId = applicationId;
+	}
+
+	/**
+	 * @return the applicationId
+	 */
+	public Long getApplicationId() {
+		return applicationId;
+	}
+
+	/**
+	 * @param applicationId the applicationId to set
+	 */
+	public void setApplicationId(Long applicationId) {
+		this.applicationId = applicationId;
+	}
+
 	
 	/**
 	 * @return the school

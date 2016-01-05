@@ -2,14 +2,43 @@ package org.camunda.bpm.infoh420.interview;
 
 import java.util.Date;
 
-public class Job {
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Version;
+
+public class JobEntity {
+
+	@Version
+	protected long version;
 	
+	@Id
+	protected Long applicationId;
 	protected String employer;
 	protected String title;
 	protected Date start;
 	protected Date end;
 	protected String countryRegion;
 	protected String city;
+	
+	/**
+	 * @return the applicationId
+	 */
+	public Long getApplicationId() {
+		return applicationId;
+	}
+
+	public JobEntity(Long applicationId) {
+		super();
+		this.applicationId = applicationId;
+	}
+
+	/**
+	 * @param applicationId the applicationId to set
+	 */
+	public void setApplicationId(Long applicationId) {
+		this.applicationId = applicationId;
+	}
+
 	
 	/**
 	 * @return the employer

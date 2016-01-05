@@ -2,12 +2,22 @@ package org.camunda.bpm.infoh420.interview;
 
 import java.util.ArrayList;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Version;
+
 /**
  * Holds a person's contact information.
  *
  */
-public class Contact {
+public class ContactEntity {
 
+	@Version
+	protected long version;
+	
+	@Id
+	protected Long applicationId;
 	protected String name;
 	protected String address;
 	protected String countryRegion;
@@ -15,6 +25,27 @@ public class Contact {
 	protected String zip;
 	protected ArrayList<String> phones;
 	
+	
+	
+	public ContactEntity(Long applicationId) {
+		super();
+		this.applicationId = applicationId;
+	}
+
+	/**
+	 * @return the applicationId
+	 */
+	public Long getApplicationId() {
+		return applicationId;
+	}
+
+	/**
+	 * @param applicationId the applicationId to set
+	 */
+	public void setApplicationId(Long applicationId) {
+		this.applicationId = applicationId;
+	}
+
 	/**
 	 * @return the name
 	 */

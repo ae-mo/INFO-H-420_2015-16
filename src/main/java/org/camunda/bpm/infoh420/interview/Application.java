@@ -1,6 +1,5 @@
 package org.camunda.bpm.infoh420.interview;
 
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Version;
@@ -12,8 +11,7 @@ import java.util.ArrayList;
  *
  */
 
-@Entity
-public class ApplicationEntity implements Serializable {
+public class Application implements Serializable {
 
 	private static  final long serialVersionUID = 1L;
 
@@ -24,9 +22,9 @@ public class ApplicationEntity implements Serializable {
 	@Version
 	protected long version;
 
-	protected Contact contact;
-	protected ArrayList<Degree> degrees;
-	protected ArrayList<Job> experiences;
+	protected ContactEntity contact;
+	protected ArrayList<DegreeEntity> degrees;
+	protected ArrayList<JobEntity> experiences;
 
 	protected boolean approved;
 
@@ -61,42 +59,42 @@ public class ApplicationEntity implements Serializable {
 	/**
 	 * @return the contact
 	 */
-	public Contact getContact() {
+	public ContactEntity getContact() {
 		return contact;
 	}
 
 	/**
 	 * @param contact the contact to set
 	 */
-	public void setContact(Contact contact) {
+	public void setContact(ContactEntity contact) {
 		this.contact = contact;
 	}
 
 	/**
 	 * @return the degrees
 	 */
-	public ArrayList<Degree> getDegrees() {
+	public ArrayList<DegreeEntity> getDegrees() {
 		return degrees;
 	}
 
 	/**
 	 * @param degrees the degrees to set
 	 */
-	public void setDegrees(ArrayList<Degree> degrees) {
+	public void setDegrees(ArrayList<DegreeEntity> degrees) {
 		this.degrees = degrees;
 	}
 
 	/**
 	 * @return the experiences
 	 */
-	public ArrayList<Job> getExperiences() {
+	public ArrayList<JobEntity> getExperiences() {
 		return experiences;
 	}
 
 	/**
 	 * @param experiences the experiences to set
 	 */
-	public void setExperiences(ArrayList<Job> experiences) {
+	public void setExperiences(ArrayList<JobEntity> experiences) {
 		this.experiences = experiences;
 	}
 

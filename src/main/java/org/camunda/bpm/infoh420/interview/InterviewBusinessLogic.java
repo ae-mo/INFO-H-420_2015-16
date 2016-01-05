@@ -20,13 +20,13 @@ public class InterviewBusinessLogic {
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	public void persistOrder(DelegateExecution delegateExecution) {
+	public void persistApplication(DelegateExecution delegateExecution) {
 		
 		// Create new application instance
-		ApplicationEntity applicationEntity = new ApplicationEntity();
-		Contact contact = new Contact();
-		ArrayList<Degree> degrees = new ArrayList<Degree>();
-		ArrayList<Job> experiences = new ArrayList<Job>();
+		Application application = new Application();
+		ContactEntity contact = new ContactEntity(application.getId());
+		ArrayList<DegreeEntity> degrees = new ArrayList<DegreeEntity>();
+		ArrayList<JobEntity> experiences = new ArrayList<JobEntity>();
 		
 		// Set contact info
 		contact.setName("Andrea");
@@ -39,7 +39,7 @@ public class InterviewBusinessLogic {
 		phones.add("+393470622606");
 		
 		// Set degree info
-		Degree degree = new Degree();
+		DegreeEntity degree = new DegreeEntity(application.getId());
 		degree.setTitle("Bachelor in Engineering");
 		degree.setStatus("OBTAINED");
 		degree.setSchool("Politecnico di Milano");
@@ -48,7 +48,7 @@ public class InterviewBusinessLogic {
 		degrees.add(degree);
 		
 		// Set job info
-		Job job = new Job();
+		JobEntity job = new JobEntity(application.getId());
 		job.setEmployer("Freedelity");
 		job.setTitle("Web Developer");
 		job.setStart(new GregorianCalendar(2015, Calendar.JULY, 6).getTime());
@@ -57,19 +57,21 @@ public class InterviewBusinessLogic {
 		job.setCity("Ixelles");
 		experiences.add(job);
 		
-		applicationEntity.setContact(contact);
-		applicationEntity.setDegrees(degrees);
-		applicationEntity.setExperiences(experiences);
+		application.setContact(contact);
+		application.setDegrees(degrees);
+		application.setExperiences(experiences);
 		
 		/*
 	     Persist order instance and flush. After the flush the
 	     id of the order instance is set.
 		 */
-		entityManager.persist(applicationEntity);
+		entityManager.persist(contact);
+		entityManager.persist(degree);
+		entityManager.persist(job);
 		entityManager.flush();
 
 		// Add newly created order id as process variable
-		delegateExecution.setVariable("applicationId", applicationEntity.getId());
+		delegateExecution.setVariable("applicationId", application.getId());
 	}	
 
 }
