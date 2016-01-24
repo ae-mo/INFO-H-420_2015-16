@@ -2,16 +2,21 @@ package org.camunda.bpm.infoh420.interview;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Version;
 
+@Entity
 public class JobEntity {
+
+	@Id
+	@GeneratedValue
+	protected Long id;
 
 	@Version
 	protected long version;
 	
-	@Id
 	protected Long applicationId;
 	protected String employer;
 	protected String title;
@@ -21,15 +26,25 @@ public class JobEntity {
 	protected String city;
 	
 	/**
+	 * @return the id
+	 */
+	public Long getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	
+	/**
 	 * @return the applicationId
 	 */
 	public Long getApplicationId() {
 		return applicationId;
-	}
-
-	public JobEntity(Long applicationId) {
-		super();
-		this.applicationId = applicationId;
 	}
 
 	/**

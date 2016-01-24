@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+xmlns:ui="http://java.sun.com/jsf/facelets"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:f="http://java.sun.com/jsf/core">
+
+<f:view>
+<f:metadata>
+  <!-- Start working on a task. Task Id is read internally from
+       request parameters and cached in the CDI conversation scope.
+  -->
+
+  <f:event type="preRenderView" listener="#{camundaTaskForm.startTaskForm()}" />
+</f:metadata>
+<h:head>
+  <title>Approve Application</title>
+</h:head>
+<h:body>
+	
+  <h1>Contact Information</h1>
+  
+  Name: #{approveApplicationController.contact.name} <br/>
+  Address: #{approveApplicationController.contact.address} <br/>
+  Country/Region: #{approveApplicationController.contact.countryRegion} <br/>
+  City: #{approveApplicationController.contact.city} <br/>
+  ZIP: #{approveApplicationController.contact.zip} <br/>
+  
+  <h1>Degrees</h1>
+  
+  School: #{approveApplicationController.degree.school} <br/>
+  Title: #{approveApplicationController.degree.title} <br/>
+  Status: #{approveApplicationController.degree.status} <br/>
+  Field: #{approveApplicationController.degree.field} <br/>
+  Country/Region: #{approveApplicationController.degree.countryRegion} <br/>
+  
+  <h1>Past Experiences</h1>
+  
+  Employer: #{approveApplicationController.job.employer} <br/>
+  Title: #{approveApplicationController.job.title} <br/>
+  Start: #{approveApplicationController.job.start} <br/>
+  End: #{approveApplicationController.job.end} <br/>
+  Country/Region: #{approveApplicationController.job.countryRegion} <br/>
+  City: #{approveApplicationController.job.city} <br/>
+	
+  
+  <h:form id="submitForm">
+    <h:outputLabel>Approve application?</h:outputLabel>
+    <h:selectBooleanCheckbox value="#{approveApplicationController.applicationEntity.approved}"/><br/>
+    <h:commandButton id="submit_button" value="Approve Order" action="#{approveApplicationController.submitForm()}" />
+  </h:form>
+</h:body>
+</f:view>
+</html>

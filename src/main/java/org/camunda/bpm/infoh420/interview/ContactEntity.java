@@ -11,12 +11,17 @@ import javax.persistence.Version;
  * Holds a person's contact information.
  *
  */
+@Entity
 public class ContactEntity {
+
+
+	@Id
+	@GeneratedValue
+	protected Long id;
 
 	@Version
 	protected long version;
-	
-	@Id
+
 	protected Long applicationId;
 	protected String name;
 	protected String address;
@@ -24,12 +29,19 @@ public class ContactEntity {
 	protected String city;
 	protected String zip;
 	protected ArrayList<String> phones;
-	
-	
-	
-	public ContactEntity(Long applicationId) {
-		super();
-		this.applicationId = applicationId;
+
+	/**
+	 * @return the id
+	 */
+	public Long getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	/**
