@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:collaboration id="Collaboration_0mb9b44">
+    <bpmn:participant id="hiring-manager" name="Hiring Manager" processRef="assemble-board" />
+  </bpmn:collaboration>
+  <bpmn:process id="assemble-board" name="Assemble Interview Board" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>SequenceFlow_0jljxya</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="get-interviewers" name="Get Interviewers List" camunda:expression="${true}">
+      <bpmn:incoming>SequenceFlow_0jljxya</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0xmeejb</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="SequenceFlow_0jljxya" sourceRef="StartEvent_1" targetRef="get-interviewers" />
+    <bpmn:sequenceFlow id="SequenceFlow_0xmeejb" sourceRef="get-interviewers" targetRef="report-employee" />
+    <bpmn:endEvent id="EndEvent_0pvyz39">
+      <bpmn:incoming>SequenceFlow_0r6dhrk</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0r6dhrk" sourceRef="report-employee" targetRef="EndEvent_0pvyz39" />
+    <bpmn:callActivity id="report-employee" name="Report Employe" calledElement="report">
+      <bpmn:incoming>SequenceFlow_0xmeejb</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0r6dhrk</bpmn:outgoing>
+    </bpmn:callActivity>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0mb9b44">
+      <bpmndi:BPMNShape id="Participant_1r6poki_di" bpmnElement="hiring-manager">
+        <dc:Bounds x="99" y="187" width="842" height="348" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="149" y="280" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="122" y="316" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_0pvyz39_di" bpmnElement="EndEvent_0pvyz39">
+        <dc:Bounds x="802" y="280" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="775" y="316" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_09ramkw_di" bpmnElement="get-interviewers">
+        <dc:Bounds x="372" y="258" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0jljxya_di" bpmnElement="SequenceFlow_0jljxya">
+        <di:waypoint xsi:type="dc:Point" x="185" y="298" />
+        <di:waypoint xsi:type="dc:Point" x="372" y="298" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="233.5" y="288" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0xmeejb_di" bpmnElement="SequenceFlow_0xmeejb">
+        <di:waypoint xsi:type="dc:Point" x="472" y="298" />
+        <di:waypoint xsi:type="dc:Point" x="571" y="298" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="489" y="288" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0r6dhrk_di" bpmnElement="SequenceFlow_0r6dhrk">
+        <di:waypoint xsi:type="dc:Point" x="673" y="298" />
+        <di:waypoint xsi:type="dc:Point" x="802" y="298" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="691.5" y="288" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="CallActivity_0cm9ehb_di" bpmnElement="report-employee">
+        <dc:Bounds x="571" y="258" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

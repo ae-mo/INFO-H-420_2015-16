@@ -70,6 +70,8 @@ public class ApproveApplicationController implements Serializable {
 
   public void submitForm() throws IOException {
     // Persist updated order entity and complete task form
-    interviewBusinessLogic.mergeOrderAndCompleteTask(applicationEntity, contact);
+    interviewBusinessLogic.mergeOrderAndCompleteTask(applicationEntity);
   }
+  
+ 
 }

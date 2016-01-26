@@ -2,6 +2,7 @@ package org.camunda.bpm.infoh420.interview;
 
 import org.camunda.bpm.engine.cdi.jsf.TaskForm;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
+import org.camunda.bpm.engine.impl.util.json.JSONArray;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,6 +15,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 
 @Stateless
 @Named
@@ -31,7 +36,7 @@ public class InterviewBusinessLogic {
 
 		// Create new application instance
 		ApplicationEntity applicationEntity = new ApplicationEntity();
-		
+
 		ContactEntity contact = new ContactEntity();
 		ArrayList<DegreeEntity> degrees = new ArrayList<DegreeEntity>();
 		ArrayList<JobEntity> experiences = new ArrayList<JobEntity>();
@@ -90,17 +95,17 @@ public class InterviewBusinessLogic {
 		// Load order entity from database
 		return entityManager.find(ApplicationEntity.class, applicationId);
 	}
-	
+
 	public ContactEntity getContact(Long contactId) {
 		// Load order entity from database
 		return entityManager.find(ContactEntity.class, contactId);
 	}
-	
+
 	public DegreeEntity getDegree(Long degreeId) {
 		// Load order entity from database
 		return entityManager.find(DegreeEntity.class, degreeId);
 	}
-	
+
 	public JobEntity getJob( Long jobId) {
 		// Load order entity from database
 		return entityManager.find(JobEntity.class, jobId);
@@ -110,10 +115,19 @@ public class InterviewBusinessLogic {
     Merge updated order entity and complete task form in one transaction. This ensures
     that both changes will rollback if an error occurs during transaction.
 	 */
-	public void mergeOrderAndCompleteTask(ApplicationEntity applicationEntity, ContactEntity contact) {
+	public void mergeOrderAndCompleteTask(ApplicationEntity applicationEntity) {
 		// Merge detached order entity with current persisted state
 		entityManager.merge(applicationEntity);
-		entityManager.merge(contact);
+		try {
+			// Complete user task from
+			taskForm.completeTask();
+		} catch (IOException e) {
+			// Rollback both transactions on error
+			throw new RuntimeException("Cannot complete task", e);
+		}
+	}
+	
+	public void mergeOrderAndCompleteTask() {
 		try {
 			// Complete user task from
 			taskForm.completeTask();
@@ -123,5 +137,11 @@ public class InterviewBusinessLogic {
 		}
 	}
 
+	public void getInterviewers(DelegateExecution delegateExecutionn) {
+
+		Client client = ClientBuilder.newClient();
+		WebTarget target = client.target("http://localhost:8080/engine-rest/user?firstName=John");
+		JSONArray response = target.request(MediaType.APPLICATION_JSON).get(JSONArray.class);
+	}
 
 }
