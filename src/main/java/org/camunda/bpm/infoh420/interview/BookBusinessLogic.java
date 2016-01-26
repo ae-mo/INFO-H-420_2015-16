@@ -56,7 +56,7 @@ public class BookBusinessLogic {
 	    delegateExecution.setVariable("bookId", bookEntity.getId());
 	  }
 	  	  
-	  public BookEntity getOrder(Long bookId) {
+	  public BookEntity getBooking(Long bookId) {
 		    // Load order entity from database
 		    return entityManager.find(BookEntity.class, bookId);
 	  }
@@ -65,7 +65,7 @@ public class BookBusinessLogic {
 	    Merge updated order entity and complete task form in one transaction. This ensures
 	    that both changes will rollback if an error occurs during transaction.
 	   */
-	  public void mergeOrderAndCompleteTask(BookEntity BookEntity) {
+	  public void mergeBookingAndCompleteTask(BookEntity BookEntity) {
 	    // Merge detached order entity with current persisted state
 	    entityManager.merge(BookEntity);
 	    try {
@@ -78,8 +78,8 @@ public class BookBusinessLogic {
 	  }
 		  
 	  public void bookingOrder(DelegateExecution delegateExecution) {
-		  	BookEntity order = getOrder((Long) delegateExecution.getVariable("bookId"));
-		    LOGGER.log(Level.INFO, "\n\n\nSending Email:\nDear {0}, your booking {1} of room {2} has been done.\n\n\n", new String[]{order.getName(), String.valueOf(order.getId()), order.getRoom()});
+		  	BookEntity booking = getBooking((Long) delegateExecution.getVariable("bookId"));
+		    LOGGER.log(Level.INFO, "\n\n\nSending Email:\nDear {0}, your booking {1} of room {2} has been done.\n\n\n", new String[]{booking.getName(), String.valueOf(booking.getId()), booking.getRoom()});
 		  }
 
 	

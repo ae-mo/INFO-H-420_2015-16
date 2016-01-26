@@ -56,7 +56,7 @@ public class AppointBusinessLogic {
 		    delegateExecution.setVariable("AppointmentId", AppEntity.getId());
 		  }
 		  	  
-		  public AppointEntity getOrder(Long AppointmentId) {
+		  public AppointEntity getAppoint(Long AppointmentId) {
 			    // Load order entity from database
 			    return entityManager.find(AppointEntity.class, AppointmentId);
 		  }
@@ -65,7 +65,7 @@ public class AppointBusinessLogic {
 		    Merge updated order entity and complete task form in one transaction. This ensures
 		    that both changes will rollback if an error occurs during transaction.
 		   */
-		  public void mergeOrderAndCompleteTask(AppointEntity AppEntity) {
+		  public void mergeAppointAndCompleteTask(AppointEntity AppEntity) {
 		    // Merge detached order entity with current persisted state
 		    entityManager.merge(AppEntity);
 		    try {
@@ -77,10 +77,10 @@ public class AppointBusinessLogic {
 		    }
 		  }
 			  
-		 public void appointOrder(DelegateExecution delegateExecution) {
-			 	AppointEntity order = getOrder((Long) delegateExecution.getVariable("AppointmentId"));
+		 public void appointInfo(DelegateExecution delegateExecution) {
+			 	AppointEntity appointment = getAppoint((Long) delegateExecution.getVariable("AppointmentId"));
 			    LOGGER.log(Level.INFO, "\n\n\nSending Email:\nDear {0}, your Appointmen with {1} is set {2} for: \n day: {3} month {4} year {5} at {6}:{7}.\n\n\n",
-			    		new String[]{order.getNamei(), order.getNameie(), order.getDay2(), order.getMonth2(), order.getYear2(), order.getHour2(), order.getMinute2()});
+			    		new String[]{appointment.getNamei(), appointment.getNameie(), appointment.getDay2(), appointment.getMonth2(), appointment.getYear2(), appointment.getHour2(), appointment.getMinute2()});
 			  }
 
 		
