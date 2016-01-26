@@ -1,0 +1,170 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core">
+
+<f:view>
+  <f:metadata>
+    <!-- Start a new process instance. The Process Definition Key is read internally from
+         request parameters and cached in the CDI conversation scope.
+    -->
+    <f:event type="preRenderView" listener="#{camundaTaskForm.startTaskForm()}" />
+  </f:metadata>
+  <h:head>
+    <title>Book A Room</title>
+  </h:head>
+  <h:body>
+    <h1>Select A Room</h1>
+    <h:form id="submitForm">
+    <br></br>  
+	<br></br>
+          <label for="room">Rooms Available:</label>
+          <h:selectOneMenu id="room" value="#{processVariables['room']}">
+              <f:selectItem itemValue="Descartes" itemLabel="Descartes"/>
+              <f:selectItem itemValue="Apollo" itemLabel="Apollo"/>
+              <f:selectItem itemValue="Socrates" itemLabel="Socrates"/>
+              <f:selectItem itemValue="Platon" itemLabel="Platon"/>
+          </h:selectOneMenu>
+	<br></br>
+	<br></br>
+          <label for="name">Name Interviewer:</label>
+          <!-- create process variables using the processVariables map. -->
+          <h:inputText id="name" value="#{processVariables['name']}" required="true" />
+	<br></br>
+	<br></br>	  
+		 <label for="date">Date</label> 
+	<br></br>
+	<br></br>
+		 <label for="day1">Day: </label>
+		 <h:selectOneMenu id="day1" value="#{processVariables['day1']}">
+		  	<f:selectItem itemValue="1" itemLabel="1"/>	
+		  	<f:selectItem itemValue="2" itemLabel="2"/>
+		  	<f:selectItem itemValue="3" itemLabel="3"/>
+		  	<f:selectItem itemValue="4" itemLabel="4"/>
+		  	<f:selectItem itemValue="5" itemLabel="5"/>
+		  	<f:selectItem itemValue="6" itemLabel="6"/>
+		  	<f:selectItem itemValue="7" itemLabel="7"/>
+		  	<f:selectItem itemValue="8" itemLabel="8"/>
+		  	<f:selectItem itemValue="9" itemLabel="9"/>
+		  	<f:selectItem itemValue="10" itemLabel="10"/>
+		  	<f:selectItem itemValue="11" itemLabel="11"/>
+		  	<f:selectItem itemValue="12" itemLabel="12"/>
+		  	<f:selectItem itemValue="13" itemLabel="13"/>
+		  	<f:selectItem itemValue="14" itemLabel="14"/>
+		  	<f:selectItem itemValue="15" itemLabel="15"/>
+		  	<f:selectItem itemValue="16" itemLabel="16"/>
+		  	<f:selectItem itemValue="17" itemLabel="17"/>
+		  	<f:selectItem itemValue="18" itemLabel="18"/>
+		  	<f:selectItem itemValue="19" itemLabel="19"/>
+		  	<f:selectItem itemValue="20" itemLabel="20"/>
+		  	<f:selectItem itemValue="21" itemLabel="21"/>
+		  	<f:selectItem itemValue="22" itemLabel="22"/>
+		  	<f:selectItem itemValue="23" itemLabel="23"/>
+		  	<f:selectItem itemValue="24" itemLabel="24"/>
+		  	<f:selectItem itemValue="25" itemLabel="25"/>
+		  	<f:selectItem itemValue="26" itemLabel="26"/>
+		  	<f:selectItem itemValue="27" itemLabel="27"/>
+		  	<f:selectItem itemValue="28" itemLabel="28"/>
+		  	<f:selectItem itemValue="29" itemLabel="29"/>
+		  	<f:selectItem itemValue="30" itemLabel="30"/>
+		  	<f:selectItem itemValue="31" itemLabel="32"/>
+		 </h:selectOneMenu>
+		 
+		 <label for="month1">Month: </label>
+		 <h:selectOneMenu id="month1" value="#{processVariables['month1']}">
+		  	<f:selectItem itemValue="January" itemLabel="January"/>	
+		  	<f:selectItem itemValue="February" itemLabel="February"/>
+		  	<f:selectItem itemValue="March" itemLabel="March"/>
+		  	<f:selectItem itemValue="April" itemLabel="April"/>
+		  	<f:selectItem itemValue="May" itemLabel="May"/>
+		  	<f:selectItem itemValue="June" itemLabel="June"/>
+		  	<f:selectItem itemValue="July" itemLabel="July"/>
+		  	<f:selectItem itemValue="August" itemLabel="August"/>
+		  	<f:selectItem itemValue="October" itemLabel="October"/>
+		  	<f:selectItem itemValue="November" itemLabel="November"/>
+		  	<f:selectItem itemValue="December" itemLabel="December"/>
+		 </h:selectOneMenu> 	
+		 
+		 <label for="year1">Year: </label>
+		 <h:selectOneMenu id="year1" value="#{processVariables['year1']}">
+		  	<f:selectItem itemValue="2016" itemLabel="2016"/>	
+		  	<f:selectItem itemValue="2017" itemLabel="2017"/>
+		  	<f:selectItem itemValue="2018" itemLabel="2018"/>
+		  	<f:selectItem itemValue="2019" itemLabel="2019"/>
+		  	<f:selectItem itemValue="2020" itemLabel="2020"/>
+		 </h:selectOneMenu> 
+		 <br></br>
+		 <br></br>
+		 
+		 <label for="fhour1">From Hour: </label>
+		 <h:selectOneMenu id="fhour1" value="#{processVariables['fhour1']}">
+		  	<f:selectItem itemValue="6" itemLabel="6"/>
+		  	<f:selectItem itemValue="7" itemLabel="7"/>
+		  	<f:selectItem itemValue="8" itemLabel="8"/>
+		  	<f:selectItem itemValue="9" itemLabel="9"/>
+		  	<f:selectItem itemValue="10" itemLabel="10"/>
+		  	<f:selectItem itemValue="11" itemLabel="11"/>
+		  	<f:selectItem itemValue="12" itemLabel="12"/>
+		  	<f:selectItem itemValue="13" itemLabel="13"/>
+		  	<f:selectItem itemValue="14" itemLabel="14"/>
+		  	<f:selectItem itemValue="15" itemLabel="15"/>
+		  	<f:selectItem itemValue="16" itemLabel="16"/>
+		  	<f:selectItem itemValue="17" itemLabel="17"/>
+		  	<f:selectItem itemValue="18" itemLabel="18"/>
+		  	<f:selectItem itemValue="19" itemLabel="19"/>
+		 </h:selectOneMenu>
+		 
+		 <label for="fminute1">Minute: </label>
+		 <h:selectOneMenu id="fminute1" value="#{processVariables['fminute1']}">
+		  	<f:selectItem itemValue="00" itemLabel="00"/>
+		  	<f:selectItem itemValue="15" itemLabel="15"/>
+		  	<f:selectItem itemValue="30" itemLabel="30"/>
+		  	<f:selectItem itemValue="45" itemLabel="45"/>
+		 </h:selectOneMenu> 	
+		 
+		 <br></br>
+		 <br></br>
+		 
+		 <label for="thour1">To Hour: </label>
+		 <h:selectOneMenu id="thour1" value="#{processVariables['thour1']}">
+		  	<f:selectItem itemValue="6" itemLabel="6"/>
+		  	<f:selectItem itemValue="7" itemLabel="7"/>
+		  	<f:selectItem itemValue="8" itemLabel="8"/>
+		  	<f:selectItem itemValue="9" itemLabel="9"/>
+		  	<f:selectItem itemValue="10" itemLabel="10"/>
+		  	<f:selectItem itemValue="11" itemLabel="11"/>
+		  	<f:selectItem itemValue="12" itemLabel="12"/>
+		  	<f:selectItem itemValue="13" itemLabel="13"/>
+		  	<f:selectItem itemValue="14" itemLabel="14"/>
+		  	<f:selectItem itemValue="15" itemLabel="15"/>
+		  	<f:selectItem itemValue="16" itemLabel="16"/>
+		  	<f:selectItem itemValue="17" itemLabel="17"/>
+		  	<f:selectItem itemValue="18" itemLabel="18"/>
+		  	<f:selectItem itemValue="19" itemLabel="19"/>
+		  	<f:selectItem itemValue="20" itemLabel="20"/>
+		 </h:selectOneMenu>
+		 
+		 <label for="tminute1">Minute: </label>
+		 <h:selectOneMenu id="tminute1" value="#{processVariables['tminute1']}">
+		  	<f:selectItem itemValue="00" itemLabel="00"/>
+		  	<f:selectItem itemValue="15" itemLabel="15"/>
+		  	<f:selectItem itemValue="30" itemLabel="30"/>
+		  	<f:selectItem itemValue="45" itemLabel="45"/>
+		 </h:selectOneMenu>
+		 <!--<input type="date" name="fecha"/>  -->
+		<br></br> 
+		<br></br>
+      
+
+      <!-- The button starts a new process instance. This ends the conversation and redirects us to the tasklist.
+
+           NOTE: Syntax is different when working on user task forms, see file "approveLoanRequest.xhtml".
+      -->
+      <h:commandButton id="submit_button" value="Book a room" action="#{camundaTaskForm.completeTask()}" />
+
+      <h:messages style="color:red;margin:8px;" />
+    </h:form>
+  </h:body>
+</f:view>
+</html>
