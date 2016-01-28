@@ -46,7 +46,7 @@ xmlns:f="http://java.sun.com/jsf/core">
   <h:form id="submitForm">
     <h:outputLabel>Approve application?</h:outputLabel>
     <h:selectBooleanCheckbox value="#{approveApplicationController.applicationEntity.approved}"/><br/>
-    <h:commandButton id="submit_button" value="Approve Order" action="#{approveApplicationController.submitForm()}" />
+    <h:commandButton id="submit_button" value="Submit" action="#{approveApplicationController.submitForm()}" />
   </h:form>
 </h:body>
 </f:view>

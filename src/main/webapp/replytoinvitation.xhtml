@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<f:view>
+	<f:metadata>
+		<!-- Start working on a task. Task Id is read internally from
+       request parameters and cached in the CDI conversation scope.
+  -->
+
+		<f:event type="preRenderView"
+			listener="#{camundaTaskForm.startTaskForm()}" />
+	</f:metadata>
+	<h:head>
+		<title>Approve Application</title>
+	</h:head>
+	<h:body>
+
+		<h1>Invitation for Candidates Interview</h1>
+  
+  Period: 
+  
+  <h:form id="submitForm">
+			<h:outputLabel>Your reply?</h:outputLabel>
+			<h:selectOneRadio value="#{user.favColor1}">
+				<f:selectItem itemValue="yes" itemLabel="Yes" />
+				<f:selectItem itemValue="no" itemLabel="No" />
+			</h:selectOneRadio>
+			<br />
+			If negative, provide a reason:
+			<h:inputTextarea cols="30" rows="10" />
+			<h:commandButton id="submit_button" value="Reply"
+				action="#{replyToInvitationController.submitForm()}" />
+		</h:form>
+	</h:body>
+</f:view>
+</html>

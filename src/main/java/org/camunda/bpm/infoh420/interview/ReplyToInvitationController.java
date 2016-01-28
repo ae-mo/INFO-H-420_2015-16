@@ -14,16 +14,15 @@ import java.io.Serializable;
 
 @Named
 @ConversationScoped
-public class ReportEmployeeController implements Serializable {
+public class ReplyToInvitationController implements Serializable {
 
-	private static  final long serialVersionUID = 2L;
-	
+	private static  final long serialVersionUID = 3L;
+
 	@Inject
 	private InterviewBusinessLogic interviewBusinessLogic;
+	
+	public void submitForm() throws IOException {
+	    interviewBusinessLogic.completeTask();
+	  }
 
-	public void submitForm()  throws IOException {
-
-		interviewBusinessLogic.completeTask();
-
-	}
 }

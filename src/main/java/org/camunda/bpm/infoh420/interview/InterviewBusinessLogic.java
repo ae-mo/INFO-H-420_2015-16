@@ -1,7 +1,11 @@
 package org.camunda.bpm.infoh420.interview;
 
+import org.camunda.bpm.engine.IdentityService;
+import org.camunda.bpm.engine.ProcessEngine;
+import org.camunda.bpm.engine.ProcessEngines;
 import org.camunda.bpm.engine.cdi.jsf.TaskForm;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
+import org.camunda.bpm.engine.identity.User;
 import org.camunda.bpm.engine.impl.util.json.JSONArray;
 
 import java.io.IOException;
@@ -9,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -115,7 +120,7 @@ public class InterviewBusinessLogic {
     Merge updated order entity and complete task form in one transaction. This ensures
     that both changes will rollback if an error occurs during transaction.
 	 */
-	public void mergeOrderAndCompleteTask(ApplicationEntity applicationEntity) {
+	public void mergeApplicationAndCompleteTask(ApplicationEntity applicationEntity) {
 		// Merge detached order entity with current persisted state
 		entityManager.merge(applicationEntity);
 		try {
@@ -127,7 +132,7 @@ public class InterviewBusinessLogic {
 		}
 	}
 	
-	public void mergeOrderAndCompleteTask() {
+	public void completeTask() {
 		try {
 			// Complete user task from
 			taskForm.completeTask();
@@ -137,11 +142,21 @@ public class InterviewBusinessLogic {
 		}
 	}
 
-	public void getInterviewers(DelegateExecution delegateExecutionn) {
+	public List<String> getInterviewers(DelegateExecution delegateExecutionn) {
 
-		Client client = ClientBuilder.newClient();
-		WebTarget target = client.target("http://localhost:8080/engine-rest/user?firstName=John");
-		JSONArray response = target.request(MediaType.APPLICATION_JSON).get(JSONArray.class);
+		ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
+		
+		List<User> users = processEngine.getIdentityService()
+				  .createUserQuery().
+				  memberOfGroup("interview-team").list();
+		
+		List<String> userIDs = new ArrayList<String>();
+		
+		for(User user: users)
+			userIDs.add(user.getId());
+		
+		return userIDs;
+		
 	}
 
 }
