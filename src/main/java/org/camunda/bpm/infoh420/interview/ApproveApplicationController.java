@@ -39,7 +39,7 @@ public class ApproveApplicationController implements Serializable {
   public ApplicationEntity getApplicationEntity() {
     if (applicationEntity == null) {
       // Load the order entity from the database if not already cached
-    	applicationEntity = interviewBusinessLogic.getApplication((Long) businessProcess.getVariable("applicationId"));
+    	applicationEntity = interviewBusinessLogic.getApplication((Long) businessProcess.getVariable("appID"));
     }
     return applicationEntity;
   }

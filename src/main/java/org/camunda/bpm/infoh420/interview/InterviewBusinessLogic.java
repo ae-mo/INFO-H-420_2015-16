@@ -14,6 +14,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -29,6 +30,8 @@ import javax.ws.rs.core.MediaType;
 @Named
 public class InterviewBusinessLogic {
 
+	private final int NBR_APPLICATIONS = 20;
+
 	// Inject the entity manager
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -37,17 +40,18 @@ public class InterviewBusinessLogic {
 	@Inject
 	private TaskForm taskForm;
 
-	public void persistApplication(DelegateExecution delegateExecution) {
+	public void persistApplications(DelegateExecution delegateExecution) {
 
 		// Create new application instance
-		ApplicationEntity applicationEntity = new ApplicationEntity();
-
+		ArrayList<ApplicationEntity> applications = new ArrayList<ApplicationEntity>();
+		for(int i=0; i < NBR_APPLICATIONS; i++) {
+			applications.add(new ApplicationEntity());
+		}
 		ContactEntity contact = new ContactEntity();
 		ArrayList<DegreeEntity> degrees = new ArrayList<DegreeEntity>();
 		ArrayList<JobEntity> experiences = new ArrayList<JobEntity>();
 
 		// Set contact info
-		contact.setApplicationId(applicationEntity.getId());
 		contact.setName("Andrea");
 		contact.setAddress("Boulevard du Triomphe, 153");
 		contact.setCountryRegion("Brussels");
@@ -59,7 +63,6 @@ public class InterviewBusinessLogic {
 
 		// Set degree info
 		DegreeEntity degree = new DegreeEntity();
-		degree.setApplicationId(applicationEntity.getId());
 		degree.setTitle("Bachelor in Engineering");
 		degree.setStatus("OBTAINED");
 		degree.setSchool("Politecnico di Milano");
@@ -69,7 +72,6 @@ public class InterviewBusinessLogic {
 
 		// Set job info
 		JobEntity job = new JobEntity();
-		job.setApplicationId(applicationEntity.getId());
 		job.setEmployer("Freedelity");
 		job.setTitle("Web Developer");
 		job.setStart(new GregorianCalendar(2015, Calendar.JULY, 6).getTime());
@@ -82,19 +84,35 @@ public class InterviewBusinessLogic {
 	     Persist order instance and flush. After the flush the
 	     id of the order instance is set.
 		 */
-		entityManager.persist(applicationEntity);
+		for(ApplicationEntity app: applications) {
+			entityManager.persist(app);
+		}
 		entityManager.persist(contact);
 		entityManager.persist(degree);
 		entityManager.persist(job);
 		entityManager.flush();
 
 		// Add newly created order id as process variable
-		delegateExecution.setVariable("applicationId", applicationEntity.getId());
+		for(int i=0; i < NBR_APPLICATIONS; i++) {
+			delegateExecution.setVariable("appId" + i, applications.get(i).getId());
+		}
 		delegateExecution.setVariable("contactId", contact.getId());
 		delegateExecution.setVariable("degreeId", degree.getId());
 		delegateExecution.setVariable("jobId", job.getId());
 	}
 
+	public List<Long> getApplicationIDs(DelegateExecution delegateExecution) {
+
+		List<Long> appIDs = new ArrayList<Long>();
+
+		for(int i=0; i < NBR_APPLICATIONS; i++) {
+
+			appIDs.add((Long) delegateExecution.getVariable("appId" + i));
+
+		}
+
+		return appIDs;
+	}
 
 	public ApplicationEntity getApplication(Long applicationId) {
 		// Load order entity from database
@@ -131,7 +149,7 @@ public class InterviewBusinessLogic {
 			throw new RuntimeException("Cannot complete task", e);
 		}
 	}
-	
+
 	public void completeTask() {
 		try {
 			// Complete user task from
@@ -142,21 +160,34 @@ public class InterviewBusinessLogic {
 		}
 	}
 
-	public List<String> getInterviewers(DelegateExecution delegateExecutionn) {
+	public List<String> getInterviewers() {
 
 		ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
-		
+
 		List<User> users = processEngine.getIdentityService()
-				  .createUserQuery().
-				  memberOfGroup("interview-team").list();
-		
+				.createUserQuery().
+				memberOfGroup("interview-team").list();
+
 		List<String> userIDs = new ArrayList<String>();
-		
+
 		for(User user: users)
 			userIDs.add(user.getId());
-		
+
 		return userIDs;
-		
+
+	}
+
+
+	public void mergeInvitationAndCompleteTask(InvitationEntity invitationEntity) {
+		// Merge detached order entity with current persisted state
+		entityManager.merge(invitationEntity);
+		try {
+			// Complete user task from
+			taskForm.completeTask();
+		} catch (IOException e) {
+			// Rollback both transactions on error
+			throw new RuntimeException("Cannot complete task", e);
+		}
 	}
 
 }

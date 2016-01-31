@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
-  <bpmn:collaboration id="interview">
+  <bpmn:collaboration id="Interview">
     <bpmn:participant id="company" name="Company" processRef="intervie" />
   </bpmn:collaboration>
   <bpmn:process id="intervie" isExecutable="true">
@@ -16,23 +16,26 @@
         <bpmn:flowNodeRef>EndEvent_0wwfl3t</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="hr-manager" name="Hiring Manager">
-        <bpmn:flowNodeRef>CallActivity_008xsne</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ask-interviewers</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>evaluate-responses</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>UserTask_1elkdm3</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>ExclusiveGateway_04rv20b</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>EndEvent_1knw8s7</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Lane_1nz0yw8" name="Interview Team">
-        <bpmn:flowNodeRef>ManualTask_1ro16z8</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SubProcess_0t2d2qb</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:endEvent id="EndEvent_0hcybdj" name="Not enough candidates">
       <bpmn:incoming>SequenceFlow_17zc2tf</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:callActivity id="CallActivity_008xsne" name="Ask Interviewers" calledElement="ask-interviewer">
+    <bpmn:callActivity id="ask-interviewers" name="Ask Interviewer" calledElement="ask-interviewer">
+      <bpmn:extensionElements>
+        <camunda:in source="assignee" target="assignee" />
+      </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1yfkc5x</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1col7o9</bpmn:outgoing>
-      <bpmn:multiInstanceLoopCharacteristics />
+      <bpmn:multiInstanceLoopCharacteristics camunda:exclusive="false" camunda:collection="${interviewBusinessLogic.getInterviewers()}" camunda:elementVariable="assignee" />
     </bpmn:callActivity>
     <bpmn:exclusiveGateway id="ExclusiveGateway_04rv20b" name="Enough Interviewers?">
       <bpmn:incoming>SequenceFlow_1dvkea1</bpmn:incoming>
@@ -43,10 +46,6 @@
       <bpmn:incoming>SequenceFlow_1col7o9</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1dvkea1</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:endEvent id="EndEvent_1knw8s7" name="Not enough InterviewersNo">
-      <bpmn:incoming>SequenceFlow_190hmf8</bpmn:incoming>
-      <bpmn:errorEventDefinition errorRef="Error_1qgj2ot" />
-    </bpmn:endEvent>
     <bpmn:serviceTask id="ServiceTask_08d6ba4" name="Persist Applications" camunda:expression="${interviewBusinessLogic.persistApplications(execution)}">
       <bpmn:incoming>SequenceFlow_02q0c4o</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1nmq6nl</bpmn:outgoing>
@@ -58,17 +57,14 @@
     </bpmn:exclusiveGateway>
     <bpmn:startEvent id="StartEvent_1qw6gn7" name="Fixed period of time elapsed">
       <bpmn:outgoing>SequenceFlow_1my1ni2</bpmn:outgoing>
-      <bpmn:timerEventDefinition />
+      <bpmn:timerEventDefinition>
+        <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">R/P14D</bpmn:timeCycle>
+      </bpmn:timerEventDefinition>
     </bpmn:startEvent>
     <bpmn:userTask id="UserTask_1elkdm3" name="Select Candidate">
       <bpmn:incoming>SequenceFlow_1y86x75</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0xw78aq</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:manualTask id="ManualTask_1ro16z8" name="Perform Interview and Provide Feedback">
-      <bpmn:incoming>SequenceFlow_0x9i3jj</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1y86x75</bpmn:outgoing>
-      <bpmn:multiInstanceLoopCharacteristics />
-    </bpmn:manualTask>
     <bpmn:serviceTask id="ServiceTask_0usskii" name="Send Feedback" camunda:expression="${true}">
       <bpmn:incoming>SequenceFlow_0xw78aq</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_02w5gu3</bpmn:outgoing>
@@ -99,10 +95,10 @@
         <bpmn:incoming>SequenceFlow_11blrf2</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="SequenceFlow_11blrf2" name="yes" sourceRef="ExclusiveGateway_0pycmet" targetRef="suitable1">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${interviewBusinessLogic.getApplication(appID).getApproved()}</bpmn:conditionExpression>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${interviewBusinessLogic.getApplication(appID).isApproved()}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="SequenceFlow_06xrupl" name="no" sourceRef="ExclusiveGateway_0pycmet" targetRef="ServiceTask_0w8kjfz">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${not interviewBusinessLogic.getApplication(appID).getApproved()}</bpmn:conditionExpression>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${not interviewBusinessLogic.getApplication(appID).isApproved()}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="SequenceFlow_13u59w5" sourceRef="ServiceTask_0w8kjfz" targetRef="EndEvent_1e10e7h" />
       <bpmn:userTask id="UserTask_0wf864w" name="Review Application" camunda:formKey="app:approveapplication.jsf" camunda:candidateGroups="hr-recruiting">
@@ -143,15 +139,15 @@
         <bpmn:incoming>SequenceFlow_1n4eqri</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="SequenceFlow_1n4eqri" sourceRef="ServiceTask_0u0dyud" targetRef="EndEvent_1k9f5e3" />
-      <bpmn:serviceTask id="ServiceTask_0u0dyud" name="Send  Appointment Information ">
+      <bpmn:serviceTask id="ServiceTask_0u0dyud" name="Send  Appointment Information " camunda:expression="${true}">
         <bpmn:incoming>SequenceFlow_13nbc51</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_1n4eqri</bpmn:outgoing>
       </bpmn:serviceTask>
-      <bpmn:userTask id="UserTask_0x2nexs" name="Reserve a Room " camunda:formKey="app:bookroom.jsf" camunda:candidateGroups="hiring-managers">
+      <bpmn:userTask id="UserTask_0x2nexs" name="Reserve a Room " camunda:formKey="app:bookroom.jsf" camunda:candidateGroups="hr-recruiting">
         <bpmn:incoming>SequenceFlow_066q980</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_1n78n2z</bpmn:outgoing>
       </bpmn:userTask>
-      <bpmn:userTask id="UserTask_1fgzdaw" name="Set A Date" camunda:formKey="app:Selectdate.jsf" camunda:candidateGroups="hiring-managers">
+      <bpmn:userTask id="UserTask_1fgzdaw" name="Set A Date" camunda:formKey="app:Selectdate.jsf" camunda:candidateGroups="hr-recruiting">
         <bpmn:incoming>SequenceFlow_1q2z088</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_0rbu3fs</bpmn:outgoing>
       </bpmn:userTask>
@@ -169,28 +165,36 @@
     <bpmn:sequenceFlow id="SequenceFlow_17zc2tf" sourceRef="ExclusiveGateway_1aosfpl" targetRef="EndEvent_0hcybdj">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${false}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_1yfkc5x" sourceRef="evaluate-appl" targetRef="CallActivity_008xsne" />
-    <bpmn:sequenceFlow id="SequenceFlow_1col7o9" sourceRef="CallActivity_008xsne" targetRef="evaluate-responses" />
+    <bpmn:sequenceFlow id="SequenceFlow_1yfkc5x" sourceRef="evaluate-appl" targetRef="ask-interviewers" />
+    <bpmn:sequenceFlow id="SequenceFlow_1col7o9" sourceRef="ask-interviewers" targetRef="evaluate-responses" />
     <bpmn:sequenceFlow id="SequenceFlow_1dvkea1" sourceRef="evaluate-responses" targetRef="ExclusiveGateway_04rv20b" />
     <bpmn:sequenceFlow id="SequenceFlow_0tllrb2" name="yes" sourceRef="ExclusiveGateway_04rv20b" targetRef="SubProcess_1a16wzw">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${enoughInterviewers == true}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[${enoughInterviewers == "yes"}]]></bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_190hmf8" name="No" sourceRef="ExclusiveGateway_04rv20b" targetRef="EndEvent_1knw8s7">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${enoughInterviewers == false}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[${enoughInterviewers == "no"}]]></bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_02q0c4o" name="yes" sourceRef="ExclusiveGateway_1aosfpl" targetRef="ServiceTask_08d6ba4">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1nmq6nl" sourceRef="ServiceTask_08d6ba4" targetRef="evaluate-appl" />
     <bpmn:sequenceFlow id="SequenceFlow_1my1ni2" sourceRef="StartEvent_1qw6gn7" targetRef="ExclusiveGateway_1aosfpl" />
-    <bpmn:sequenceFlow id="SequenceFlow_1y86x75" sourceRef="ManualTask_1ro16z8" targetRef="UserTask_1elkdm3" />
+    <bpmn:sequenceFlow id="SequenceFlow_1y86x75" sourceRef="SubProcess_0t2d2qb" targetRef="UserTask_1elkdm3" />
     <bpmn:sequenceFlow id="SequenceFlow_0xw78aq" sourceRef="UserTask_1elkdm3" targetRef="ServiceTask_0usskii" />
-    <bpmn:sequenceFlow id="SequenceFlow_0x9i3jj" sourceRef="SubProcess_1a16wzw" targetRef="ManualTask_1ro16z8" />
+    <bpmn:sequenceFlow id="SequenceFlow_0x9i3jj" sourceRef="SubProcess_1a16wzw" targetRef="SubProcess_0t2d2qb" />
     <bpmn:sequenceFlow id="SequenceFlow_02w5gu3" sourceRef="ServiceTask_0usskii" targetRef="EndEvent_0wwfl3t" />
+    <bpmn:subProcess id="SubProcess_0t2d2qb" name="Perform Interview and Provide Feedback">
+      <bpmn:incoming>SequenceFlow_0x9i3jj</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1y86x75</bpmn:outgoing>
+    </bpmn:subProcess>
+    <bpmn:endEvent id="EndEvent_1knw8s7" name="Not enough InterviewersNo">
+      <bpmn:incoming>SequenceFlow_190hmf8</bpmn:incoming>
+      <bpmn:errorEventDefinition errorRef="Error_1qgj2ot" />
+    </bpmn:endEvent>
   </bpmn:process>
-  <bpmn:error id="Error_1qgj2ot" name="notEnoughInterviewers" />
+  <bpmn:error id="Error_1qgj2ot" name="notEnoughInterviewers" errorCode="1" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="interview">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Interview">
       <bpmndi:BPMNShape id="Participant_1v6lmf6_di" bpmnElement="company">
         <dc:Bounds x="3" y="-4" width="2865" height="1165" />
       </bpmndi:BPMNShape>
@@ -434,9 +438,6 @@
           <dc:Bounds x="1834" y="361" width="90" height="20" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="ManualTask_1ro16z8_di" bpmnElement="ManualTask_1ro16z8">
-        <dc:Bounds x="2234.8179775280896" y="62.19325842696628" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1yfkc5x_di" bpmnElement="SequenceFlow_1yfkc5x">
         <di:waypoint xsi:type="dc:Point" x="927" y="757" />
         <di:waypoint xsi:type="dc:Point" x="927" y="457" />
@@ -451,7 +452,7 @@
           <dc:Bounds x="1175" y="604" width="90" height="20" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="CallActivity_008xsne_di" bpmnElement="CallActivity_008xsne">
+      <bpmndi:BPMNShape id="CallActivity_008xsne_di" bpmnElement="ask-interviewers">
         <dc:Bounds x="876.8502994011976" y="376.6212574850299" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1dvkea1_di" bpmnElement="SequenceFlow_1dvkea1">
@@ -480,15 +481,15 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_190hmf8_di" bpmnElement="SequenceFlow_190hmf8">
         <di:waypoint xsi:type="dc:Point" x="1358" y="392" />
-        <di:waypoint xsi:type="dc:Point" x="1358" y="327" />
+        <di:waypoint xsi:type="dc:Point" x="1358" y="305" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1337" y="357" width="90" height="20" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="EndEvent_1knw8s7_di" bpmnElement="EndEvent_1knw8s7">
-        <dc:Bounds x="1340" y="291.0348913759052" width="36" height="36" />
+        <dc:Bounds x="1340" y="269" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1313" y="327.0348913759052" width="90" height="20" />
+          <dc:Bounds x="1313" y="305" width="90" height="20" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="UserTask_1elkdm3_di" bpmnElement="UserTask_1elkdm3">
@@ -548,6 +549,9 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_0usskii_di" bpmnElement="ServiceTask_0usskii">
         <dc:Bounds x="2598.5066666666667" y="845.3629629629629" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SubProcess_0t2d2qb_di" bpmnElement="SubProcess_0t2d2qb">
+        <dc:Bounds x="2235" y="62" width="100" height="80" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

@@ -19,10 +19,22 @@ public class InvitationEntity {
 	@Version
 	protected long version;
 	
-	private String subject;
-	private boolean accepted;
-	private String reasonRefused;
-	private String moreInfo;
+	private int leftInterviewers;
+
+	/**
+	 * @return the leftInterviewers
+	 */
+	public int getLeftInterviewers() {
+		return leftInterviewers;
+	}
+
+	/**
+	 * @param leftInterviewers the leftInterviewers to set
+	 */
+	public void setLeftInterviewers(int leftInterviewers) {
+		this.leftInterviewers = leftInterviewers;
+	}
+	
 	/**
 	 * @return the id
 	 */
@@ -47,54 +59,7 @@ public class InvitationEntity {
 	public void setVersion(long version) {
 		this.version = version;
 	}
-	/**
-	 * @return the subject
-	 */
-	public String getSubject() {
-		return subject;
-	}
-	/**
-	 * @param subject the subject to set
-	 */
-	public void setSubject(String subject) {
-		this.subject = subject;
-	}
-	/**
-	 * @return the accepted
-	 */
-	public boolean isAccepted() {
-		return accepted;
-	}
-	/**
-	 * @param accepted the accepted to set
-	 */
-	public void setAccepted(boolean accepted) {
-		this.accepted = accepted;
-	}
-	/**
-	 * @return the reasonRefused
-	 */
-	public String getReasonRefused() {
-		return reasonRefused;
-	}
-	/**
-	 * @param reasonRefused the reasonRefused to set
-	 */
-	public void setReasonRefused(String reasonRefused) {
-		this.reasonRefused = reasonRefused;
-	}
-	/**
-	 * @return the moreInfo
-	 */
-	public String getMoreInfo() {
-		return moreInfo;
-	}
-	/**
-	 * @param moreInfo the moreInfo to set
-	 */
-	public void setMoreInfo(String moreInfo) {
-		this.moreInfo = moreInfo;
-	}
+	
 	/**
 	 * @return the serialversionuid
 	 */
